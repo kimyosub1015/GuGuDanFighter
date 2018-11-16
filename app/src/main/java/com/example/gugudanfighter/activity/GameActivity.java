@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.gugudanfighter.R;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class GameActivity extends AppCompatActivity {
     private static final int TIME_LIMIT = 30;
@@ -36,26 +34,18 @@ public class GameActivity extends AppCompatActivity {
             R.id.button_1_0, R.id.button_1_1, R.id.button_1_2,
             R.id.button_2_0, R.id.button_2_1, R.id.button_2_2
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_game);
-
         //View 찾기
         tvLastTime = findViewById(R.id.textViewLastTime);// 화면에 남은 시간을
-
         //여기서부터 숫자표기
-
         // UI 초기화
         uiset();
         updateLastTime(TIME_LIMIT); // TIME_LIMIT(30초)를 표기
-
-
         // 타이머 시작
         timer.schedule(new GamePlayTimerTask(), 1000, 1000);
-
     }
     private void uiset(){
         int x = randomize(1, 9);
@@ -72,14 +62,14 @@ public class GameActivity extends AppCompatActivity {
             Button bx = findViewById(answerButtonIds[i]);
             for (int j = 0; j < i; j++) {
                 if (i == 0) {
-                } else if (i != 0 && t[i] == t[j]) {
+                }
+                else if (i != 0 && t[i] == t[j]) {
                     i--;
                 }
             }
             bx.setText("" + t[i]);
         }
         //랜덤으로 숫자를 가져와서 버튼에 숫자올리기 끝
-
         //x,y값 랜덤으로 불러오기
         tvX = findViewById(R.id.textViewLeftOperand);//X값
         tvY = findViewById(R.id.textViewRightOperand);//X값
@@ -91,18 +81,15 @@ public class GameActivity extends AppCompatActivity {
     private int randomize(int from, int to) {
         return (int) (Math.random() * to) + from;
     }
-
     private void updateScore(int plus, int set) {
         correctAnswerCount = plus;
         questionCount = set;
         Scores = findViewById(R.id.textViewScore);//X값
         Scores.setText(correctAnswerCount+"/"+questionCount);
     }
-
     private void updateLastTime(int lastTime) {
         tvLastTime.setText("" + lastTime);
     }
-
     public void checkAnswer(View v) {
         int index = -1;
         for (int i = 0; i < answerButtonIds.length; i++) {
@@ -134,20 +121,16 @@ public class GameActivity extends AppCompatActivity {
         public void run() {
             if (seconds >= TIME_LIMIT) {
                 /* 게임종료 */
-
                 //1. 타이머 스톱
                 timer.cancel();
-
-                //2. Result Activity 이동
-
-                //3. Activity 종료
+                //2. Activity 종료
                 correctAC = correctAnswerCount;
                 questionCo = questionCount;
                 finish();
+                //3. Result Activity 이동
                 startActivity( new Intent( GameActivity.this, ResultActivity.class  ) );
                 return;
             }
-
             seconds++;
             // UI 변경은 메인쓰레드에서 해야 함.
             runOnUiThread(new Runnable() {
@@ -156,9 +139,6 @@ public class GameActivity extends AppCompatActivity {
                     updateLastTime(TIME_LIMIT - seconds);
                 }
             });
-
         }
-
-
     }
 }
